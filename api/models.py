@@ -9,6 +9,7 @@ class Brand(models.Model):
     def __str__(self):
         return self.name
 
+
 # profile
 # has whatever data you want eg dob, email
 # foreign key of the user
@@ -43,6 +44,7 @@ class Address(models.Model):
     description = models.TextField()
 
 
+
 class Product(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField()
@@ -70,6 +72,7 @@ class Varient(models.Model):
         return self.name
 
 
+
 class Order(models.Model):
     profile = models.ForeignKey(
         Profile, related_name='orders', default=1, on_delete=models.CASCADE)
@@ -92,3 +95,4 @@ class CartItem(models.Model):
     varient = models.ForeignKey(Varient, default=1, on_delete=models.CASCADE)
     quantity = models.IntegerField()
     total_price = models.DecimalField(max_digits=10, decimal_places=3)
+
