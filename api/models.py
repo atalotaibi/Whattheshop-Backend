@@ -10,21 +10,89 @@ class Brand(models.Model):
         return self.name
 
 
+# profile
+# has whatever data you want eg dob, email
+# foreign key of the user
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=120)
+    last_name = models.CharField(max_length=120)
+    dob = models.DateField()
+    email = models.EmailField(blank=True, unique=True)
+    GENDERS = (
+        ('M', 'Male'),
+        ('F', 'Female'),
+    )
+    gender = models.CharField(
+        max_length=2,
+        choices=GENDERS,
+        default='F',
+    )
+
+    def __str__(self):
+        return self.first_name
+
+
+# address
+# forign key of the profile and has a related name
+# address detail related
+class Address(models.Model):
+    profile = models.ForeignKey(
+        Profile, related_name='addresses', default=1, on_delete=models.CASCADE)
+    description = models.TextField()
+
+
+
 class Product(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=3)
-    quantity = models.IntegerField()
-    image = models.ImageField(upload_to='products_posters')
+    stock = models.IntegerField()
+    image = models.ImageField(upload_to='products_posters', blank=True)
     brand = models.ForeignKey(Brand, default=1, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
+# Varient model
+# product as a foreign key and add a related name
+# has a price--> you have to remove the price from the `product`
+# varient name
+# Description (s,m,xl) blank=true
 
-class OrederHistory(models.Model):
-    customer = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
-    product = models.ForeignKey(Product, default=1, on_delete=models.CASCADE)
+
+class Varient(models.Model):
+    name = models.CharField(max_length=120)
+    product = models.ForeignKey(
+        Product, default=1, related_name='varients', on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=3)
+
+    def __str__(self):
+        return self.name
+
+
+
+class Order(models.Model):
+    profile = models.ForeignKey(
+        Profile, related_name='orders', default=1, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
     total_price = models.DecimalField(max_digits=10, decimal_places=3)
+
+
+# cartitem
+# takes the profile as a foreign key
+# takes the order as a foreign key has a related name
+# takes the Varient as a foriegn key
+# takes quantity as an iteger
+# total price is an integer and is the total of quantity * the product price
+class CartItem(models.Model):
+    profiles = models.ForeignKey(Profile, default=1, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, default=1, on_delete=models.CASCADE)
+    order = models.ForeignKey(
+        Order, related_name='cartItems', default=1, on_delete=models.CASCADE)
+    varient = models.ForeignKey(Varient, default=1, on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    total_price = models.DecimalField(max_digits=10, decimal_places=3)
+
