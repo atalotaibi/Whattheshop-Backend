@@ -24,6 +24,7 @@ class Product(models.Model):
 
 class OrederHistory(models.Model):
     customer = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, default=1, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
     total_price = models.DecimalField(max_digits=10, decimal_places=3)
