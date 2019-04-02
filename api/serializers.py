@@ -21,20 +21,21 @@ class UserCreateSerializer(serializers.ModelSerializer):
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
+        fields = '__all__'
 
 
 class ProductListSerializer(serializers.ModelSerializer):
-    image = ImageSerializer(many = True)
+    images = ImageSerializer(many = True)
     class Meta:
         model = Product
-        fields = ['name', 'category', 'pricae','image']
+        fields = ['name', 'category', 'price','images']
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
-    image = ImageSerializer(many = True)
+    images = ImageSerializer(many = True)
     class Meta:
         model = Product
-        fields = ['name', 'category', 'pricae','description', 'stock','image']
+        fields = ['id','name', 'category', 'price','description', 'stock','images']
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
