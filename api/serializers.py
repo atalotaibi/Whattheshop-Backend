@@ -88,6 +88,9 @@ class OrderListSerializer(serializers.ModelSerializer):
         item_list = CartItemListSerializer(cartItems, many=True).data
         return item_list
 
+    def get_total_price(self, obj):
+        return str(obj.total_price())
+
 class OrderDetailSerializer(serializers.ModelSerializer):
     # profile = ProfileSerializer() 
     class Meta:

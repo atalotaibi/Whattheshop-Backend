@@ -73,7 +73,9 @@ class Order(models.Model):
     time = models.TimeField()
 
     def total_price(self):
-        return sum(self.cartItems.all().sub_total)
+        # print(self.cartItems.all())
+        return sum(self.cartItems.all())
+        # return sum(self.cartItems.all().sub_total)
 
 
 # cartitem
