@@ -18,6 +18,25 @@ class UserCreateSerializer(serializers.ModelSerializer):
         new_user.save()
         return validated_data
 
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+
+
+# class ProductListSerializer(serializers.ModelSerializer):
+#     image = ImageSerializer(many = True)
+#     class Meta:
+#         model = Product
+#         fields = ['name', 'category', 'pricae','image']
+
+
+# class ProductDetailSerializer(serializers.ModelSerializer):
+#     image = ImageSerializer(many = True)
+#     class Meta:
+#         model = Product
+#         fields = ['name', 'category', 'pricae','description', 'stock','image']
+
+        
 
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
