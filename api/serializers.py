@@ -30,11 +30,11 @@ class ProductListSerializer(serializers.ModelSerializer):
         fields = ['name', 'category', 'pricae','image']
 
 
-# class ProductDetailSerializer(serializers.ModelSerializer):
-#     image = ImageSerializer(many = True)
-#     class Meta:
-#         model = Product
-#         fields = ['name', 'category', 'pricae','description', 'stock','image']
+class ProductDetailSerializer(serializers.ModelSerializer):
+    image = ImageSerializer(many = True)
+    class Meta:
+        model = Product
+        fields = ['name', 'category', 'pricae','description', 'stock','image']
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
