@@ -23,11 +23,11 @@ class ImageSerializer(serializers.ModelSerializer):
         model = Image
 
 
-# class ProductListSerializer(serializers.ModelSerializer):
-#     image = ImageSerializer(many = True)
-#     class Meta:
-#         model = Product
-#         fields = ['name', 'category', 'pricae','image']
+class ProductListSerializer(serializers.ModelSerializer):
+    image = ImageSerializer(many = True)
+    class Meta:
+        model = Product
+        fields = ['name', 'category', 'pricae','image']
 
 
 # class ProductDetailSerializer(serializers.ModelSerializer):
