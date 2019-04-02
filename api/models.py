@@ -2,9 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 
 
-class Brand(models.Model):
+class Category(models.Model):
     name = models.CharField(max_length=120)
-    category = models.CharField(max_length=120)
 
     def __str__(self):
         return self.name
@@ -44,13 +43,12 @@ class Address(models.Model):
     description = models.TextField()
 
 
-
 class Product(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField()
-    stock = models.IntegerField()
-    image = models.ImageField(upload_to='products_posters', blank=True)
-    brand = models.ForeignKey(Brand, default=1, on_delete=models.CASCADE)
+
+    Category = models.ForeignKey(Category, default=1, on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=3)
 
     def __str__(self):
         return self.name
@@ -60,17 +58,6 @@ class Product(models.Model):
 # has a price--> you have to remove the price from the `product`
 # varient name
 # Description (s,m,xl) blank=true
-
-
-class Varient(models.Model):
-    name = models.CharField(max_length=120)
-    product = models.ForeignKey(
-        Product, default=1, related_name='varients', on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=3)
-
-    def __str__(self):
-        return self.name
-
 
 
 class Order(models.Model):
@@ -88,11 +75,12 @@ class Order(models.Model):
 # takes quantity as an iteger
 # total price is an integer and is the total of quantity * the product price
 class CartItem(models.Model):
-    profiles = models.ForeignKey(Profile, default=1, on_delete=models.CASCADE)
+    profile = models.ForeignKey(Profile, default=1, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, default=1, on_delete=models.CASCADE)
     order = models.ForeignKey(
         Order, related_name='cartItems', default=1, on_delete=models.CASCADE)
-    varient = models.ForeignKey(Varient, default=1, on_delete=models.CASCADE)
-    quantity = models.IntegerField()
-    total_price = models.DecimalField(max_digits=10, decimal_places=3)
 
+
+class Image(models.Model):
+    product = models.ForeignKey(
+        Product, related_name='images', default=1, on_delete=models.CASCADE)
