@@ -52,7 +52,7 @@ class Product(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField()
 
-    Category = models.ForeignKey(Category, default=1, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, default=1, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=3, default=0)
 
     def __str__(self):
@@ -80,7 +80,7 @@ class Order(models.Model):
 # takes quantity as an iteger
 # total price is an integer and is the total of quantity * the product price
 class CartItem(models.Model):
-    profile = models.ForeignKey(Profile, default=1, on_delete=models.CASCADE)
+    # profile = models.ForeignKey(Profile, default=1, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, default=1, on_delete=models.CASCADE)
     order = models.ForeignKey(
         Order, related_name='cartItems', default=1, on_delete=models.CASCADE)
