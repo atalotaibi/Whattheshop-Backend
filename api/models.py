@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.dispatch import receiver
+from django.db.models.signals import post_save
 
 
 class Category(models.Model):
@@ -16,10 +18,7 @@ class Category(models.Model):
 
 class Profile(models.Model):
     user = models.ForeignKey(User, default=1, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=120)
-    last_name = models.CharField(max_length=120)
-    dob = models.DateField()
-    email = models.EmailField(blank=True, unique=True)
+    dob = models.DateField(null=True)
     GENDERS = (
         ('M', 'Male'),
         ('F', 'Female'),
@@ -31,7 +30,13 @@ class Profile(models.Model):
     )
 
     def __str__(self):
-        return self.first_name
+        return self.user.username
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwarg):
+    if created:
+        Profile.objects.create(user=instance)
 
 
 # address
@@ -48,7 +53,7 @@ class Product(models.Model):
     description = models.TextField()
 
     Category = models.ForeignKey(Category, default=1, on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=10, decimal_places=3)
+    price = models.DecimalField(max_digits=10, decimal_places=3, default=0)
 
     def __str__(self):
         return self.name
