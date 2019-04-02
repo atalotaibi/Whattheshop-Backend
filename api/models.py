@@ -51,6 +51,7 @@ class Address(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=120)
     description = models.TextField()
+    stock = models.IntegerField(default=0)
 
     category = models.ForeignKey(Category, default=1, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=3, default=0)
@@ -70,7 +71,9 @@ class Order(models.Model):
         Profile, related_name='orders', default=1, on_delete=models.CASCADE)
     date = models.DateField()
     time = models.TimeField()
-    total_price = models.DecimalField(max_digits=10, decimal_places=3)
+
+    def total_price(self):
+        return sum(self.cartItems.all().sub_total)
 
 
 # cartitem
@@ -84,6 +87,10 @@ class CartItem(models.Model):
     product = models.ForeignKey(Product, default=1, on_delete=models.CASCADE)
     order = models.ForeignKey(
         Order, related_name='cartItems', default=1, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
+
+    def sub_total(self):
+        return self.quantity * product.price
 
 
 class Image(models.Model):
