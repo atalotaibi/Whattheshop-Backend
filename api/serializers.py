@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from .models import Category, Product, Order, Profile, Address, CartItem
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
@@ -16,3 +17,43 @@ class UserCreateSerializer(serializers.ModelSerializer):
         new_user.set_password(password)
         new_user.save()
         return validated_data
+
+
+class CategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['id', 'name']
+
+
+class CategoryDetailSerializer(serializers.ModelSerializer):
+    # products = ProductSerializer(many=True)
+
+    class Meta:
+        model = Category
+    # fields =  ['name', 'category','products']
+        fields = ['name', 'category']
+
+
+class CategoryCreateUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['name', 'category']
+
+
+class CartItemListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = ['id', 'product']
+
+
+class CartItemDetailSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = CartItem
+        fields = ['product', 'varient', 'quantity', 'total_price']
+
+
+class CartItemCreateUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CartItem
+        fields = ['product', 'varient', 'quantity', 'total_price']
