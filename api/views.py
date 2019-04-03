@@ -14,10 +14,14 @@ from .serializers import (
     CartItemListSerializer,
     CartItemDetailSerializer,
     CartItemCreateUpdateSerializer,
+
+    OrderListSerializer,
+    OrderDetailSerializer,
+
     ProductListSerializer,
     ProductDetailSerializer,
-)
 
+)
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
@@ -54,3 +58,15 @@ class ProductDetailAPIView(RetrieveAPIView):
 #     queryset = Category.objects.all()
 #     lookup_field = 'id'
 #     lookup_url_kwarg = 'category_id'
+
+
+
+class OrderListView(ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderListSerializer
+
+class OrderDetailView(RetrieveAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderDetailSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'order_id'
