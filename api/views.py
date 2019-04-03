@@ -14,12 +14,23 @@ from .serializers import (
     CartItemListSerializer,
     CartItemDetailSerializer,
     CartItemCreateUpdateSerializer,
+
     AddressSerializer,
     ProfileDetailSerializer,
     ProfileCreateUpdateSerializer,
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework import generics
+
+
+    OrderListSerializer,
+    OrderDetailSerializer,
+
+    ProductListSerializer,
+    ProductDetailSerializer,
+
+)
+
 
 class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
@@ -28,6 +39,17 @@ class UserCreateAPIView(CreateAPIView):
 class CategorysList(ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryListSerializer
+
+class ProductListAPIView(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductListSerializer
+
+class ProductDetailAPIView(RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductDetailSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'product_id'
+
 
 
 # class CategoryCreate(CreateAPIView):
@@ -92,3 +114,16 @@ class AddressCreateView(CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(profile=self.request.user)
+
+
+
+class OrderListView(ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderListSerializer
+
+class OrderDetailView(RetrieveAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderDetailSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'order_id'
+
