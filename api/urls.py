@@ -40,12 +40,12 @@ urlpatterns = [
          AddressCreateView.as_view(), name='addess-create'),
 
 
-    path('api/order/list/', OrderListView.as_view(), name='api-order-list'),
-    path('api/order/<int:order_id>/detail/',
+    path('order/list/', OrderListView.as_view(), name='api-order-list'),
+    path('order/<int:order_id>/detail/',
          OrderDetailView.as_view(), name='api-order-detail'),
 
     path('product/list/', ProductListAPIView.as_view(), name='product-list'),
-    path('product/detail/<int: product_id>/',
+    path('<int:product_id>/product/detail/',
          ProductDetailAPIView.as_view(), name='product-detail'),
 
 

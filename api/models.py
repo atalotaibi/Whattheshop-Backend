@@ -108,4 +108,4 @@ class Image(models.Model):
         upload_to='products_photos', null=True, blank=True)
 
     def __str__(self):
-        return self.product
+        return self.product.name

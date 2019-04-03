@@ -14,6 +14,11 @@ from .serializers import (
     CartItemListSerializer,
     CartItemDetailSerializer,
     CartItemCreateUpdateSerializer,
+    OrderListSerializer,
+    OrderDetailSerializer,
+
+    ProductListSerializer,
+    ProductDetailSerializer,
 
     AddressSerializer,
     ProfileDetailSerializer,
@@ -21,15 +26,6 @@ from .serializers import (
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from rest_framework import generics
-
-
-    OrderListSerializer,
-    OrderDetailSerializer,
-
-    ProductListSerializer,
-    ProductDetailSerializer,
-
-)
 
 
 class UserCreateAPIView(CreateAPIView):
@@ -40,16 +36,17 @@ class CategorysList(ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryListSerializer
 
+
 class ProductListAPIView(ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductListSerializer
+
 
 class ProductDetailAPIView(RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductDetailSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'product_id'
-
 
 
 # class CategoryCreate(CreateAPIView):
@@ -80,7 +77,6 @@ class ProfileUpdateView(RetrieveUpdateAPIView):
     serializer_class = ProfileCreateUpdateSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'profile_id'
-   
 
 
 # class AddressListlView(RetrieveAPIView):
@@ -96,34 +92,34 @@ class AddressListlView(ListAPIView):
         return Address.objects.filter(profile=self.kwargs['profile_id'])
 
 
-
 class AddressUpdateView(RetrieveUpdateAPIView):
     queryset = Address.objects.all()
     serializer_class = AddressSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'address_id'
 
+
 class AddressDeleteView(DestroyAPIView):
     queryset = Address.objects.all()
     lookup_field = 'id'
     lookup_url_kwarg = 'address_id'
 
+
 class AddressCreateView(CreateAPIView):
     serializer_class = AddressSerializer
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated, ]
 
     def perform_create(self, serializer):
         serializer.save(profile=self.request.user)
-
 
 
 class OrderListView(ListAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderListSerializer
 
+
 class OrderDetailView(RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderDetailSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'order_id'
-

@@ -2,6 +2,7 @@ from django.contrib.auth.models import User
 from rest_framework import serializers
 from .models import Category, Product, Order, Profile, Address, CartItem, Image
 
+
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
 
@@ -17,30 +18,45 @@ class UserCreateSerializer(serializers.ModelSerializer):
         new_user.save()
         return validated_data
 
+
+class CategorySerialzer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ['name']
+
+
 class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
-        fields = '__all__'
+        exclude = ['product']
 
 
 class ProductListSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many = True)
+    category = CategorySerialzer()
+    images = ImageSerializer(many=True)
+
     class Meta:
         model = Product
-        fields = ['name', 'category', 'price','images']
+        fields = ['id', 'name', 'category', 'price', 'images']
+
+    def get_category(self, obj):
+        category = obj.name
+        return category
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many = True)
+    images = ImageSerializer(many=True)
+
     class Meta:
         model = Product
-        fields = ['id','name', 'category', 'price','description', 'stock','images']
+        fields = ['id', 'name', 'category', 'price',
+                  'description', 'stock', 'images']
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ['id', 'name']
+        fields = ['name']
 
 
 class CategoryDetailSerializer(serializers.ModelSerializer):
@@ -80,14 +96,15 @@ class CartItemCreateUpdateSerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        fields = ['id','description']        
+        fields = ['id', 'description']
+
 
 class ProfileDetailSerializer(serializers.ModelSerializer):
     update = serializers.HyperlinkedIdentityField(
-        view_name = "api-update",
-        lookup_field = "id",
-        lookup_url_kwarg = "profile_id"
-        )
+        view_name="api-update",
+        lookup_field="id",
+        lookup_url_kwarg="profile_id"
+    )
     addresses = AddressSerializer(many=True)
 
     class Meta:
@@ -96,8 +113,9 @@ class ProfileDetailSerializer(serializers.ModelSerializer):
             'dob',
             'gender',
             'addresses',
-             'update',
-            ]
+            'update',
+        ]
+
 
 class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
@@ -105,23 +123,25 @@ class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
         fields = [
             'dob',
             'gender',
-            ]
+        ]
 
-#  ..... Order Model .... 
+#  ..... Order Model ....
 # profile = models.ForeignKey(Profile, related_name='orders', default=1, on_delete=models.CASCADE)
 # date = models.DateField()
 # time = models.TimeField()
 #     def total_price(self):
 #         return sum(self.cartItems.all().sub_total)
 
+
 class OrderListSerializer(serializers.ModelSerializer):
     total_price = serializers.SerializerMethodField()
     cartItems = serializers.SerializerMethodField()
     detail = serializers.HyperlinkedIdentityField(
-        view_name = "api-order-detail",
-        lookup_field = "id",
-        lookup_url_kwarg = "order_id"
-        )
+        view_name="api-order-detail",
+        lookup_field="id",
+        lookup_url_kwarg="order_id"
+    )
+
     class Meta:
         model = Order
         fields = [
@@ -132,7 +152,8 @@ class OrderListSerializer(serializers.ModelSerializer):
             'total_price',
             'cartItems',
             'detail',
-            ]
+        ]
+
     def get_cartItems(self, obj):
         cartItems = CartItem.objects.filter(order=obj)
         item_list = CartItemListSerializer(cartItems, many=True).data
@@ -141,8 +162,9 @@ class OrderListSerializer(serializers.ModelSerializer):
     def get_total_price(self, obj):
         return str(obj.total_price())
 
+
 class OrderDetailSerializer(serializers.ModelSerializer):
-    # profile = ProfileSerializer() 
+    # profile = ProfileSerializer()
     class Meta:
         cartItems = serializers.SerializerMethodField()
         model = Order
@@ -152,9 +174,9 @@ class OrderDetailSerializer(serializers.ModelSerializer):
             'time',
             # 'total_price',
             'cartItems',
-            ]
+        ]
+
     def get_cartItems(self, obj):
         cartItems = CartItem.objects.filter(order=obj)
         item_list = CartItemListSerializer(cartItems, many=True).data
         return item_list
-
