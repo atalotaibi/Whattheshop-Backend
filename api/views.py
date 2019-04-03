@@ -13,7 +13,9 @@ from .serializers import (
     CategoryCreateUpdateSerializer,
     CartItemListSerializer,
     CartItemDetailSerializer,
-    CartItemCreateUpdateSerializer
+    CartItemCreateUpdateSerializer,
+    ProductListSerializer,
+    ProductDetailSerializer,
 )
 
 
@@ -24,6 +26,17 @@ class UserCreateAPIView(CreateAPIView):
 class CategorysList(ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryListSerializer
+
+class ProductListAPIView(ListAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductListSerializer
+
+class ProductDetailAPIView(RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductDetailSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'product_id'
+
 
 
 # class CategoryCreate(CreateAPIView):
