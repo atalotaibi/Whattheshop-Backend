@@ -73,13 +73,10 @@ class Order(models.Model):
 	time = models.TimeField()
 
 	def total_price(self):
-		# print(self.cartItems.all())
-		# return sum(self.cartItems.all())
-		# return sum(self.cartItems.all().sub_total)
+		
 		 return sum(self.cartItems.all().values_list('sub_total', flat=True))
 
 
-# cartitem
 # takes the profile as a foreign key
 # takes the order as a foreign key has a related name
 # takes the Varient as a foriegn key
