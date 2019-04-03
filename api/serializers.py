@@ -57,3 +57,33 @@ class CartItemCreateUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = ['product', 'varient', 'quantity', 'total_price']
+
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = ['id','description']        
+
+class ProfileDetailSerializer(serializers.ModelSerializer):
+    update = serializers.HyperlinkedIdentityField(
+        view_name = "api-update",
+        lookup_field = "id",
+        lookup_url_kwarg = "profile_id"
+        )
+    addresses = AddressSerializer(many=True)
+
+    class Meta:
+        model = Profile
+        fields = [
+            'dob',
+            'gender',
+            'addresses',
+             'update',
+            ]
+
+class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = [
+            'dob',
+            'gender',
+            ]
