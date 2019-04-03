@@ -59,6 +59,9 @@ class Product(models.Model):
 	def __str__(self):
 		return self.name
 
+    # def image(self):
+    #     return self.images.first()
+
 # Varient model
 # product as a foreign key and add a related name
 # has a price--> you have to remove the price from the `product`
@@ -93,7 +96,16 @@ class CartItem(models.Model):
 	def get_sub_total(self):
 		self.sub_total = self.quantity * self.product.price
 
+# ----------***added an image field***------------
 
 class Image(models.Model):
+
 	product = models.ForeignKey(
 		Product, related_name='images', default=1, on_delete=models.CASCADE)
+
+    image = models.ImageField(upload_to='products_photos', null=True, blank=True)
+    
+    def __str__(self):
+        return self.product
+
+
