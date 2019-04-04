@@ -19,12 +19,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
 		return validated_data
 
 
-class CategorySerialzer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ['name']
-
-
 class ImageSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = Image
@@ -51,38 +45,17 @@ class CategoryListSerializer(serializers.ModelSerializer):
 		fields = ['id', 'name']
 
 
-class CategoryDetailSerializer(serializers.ModelSerializer):
-	# products = ProductSerializer(many=True)
-
-	class Meta:
-		model = Category
-	# fields =  ['name', 'category','products']
-		fields = ['name', 'category']
-
-
-class CategoryCreateUpdateSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = Category
-		fields = ['name', 'category']
-
-
-class CartItemListSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = CartItem
-		fields = ['id', 'product']
-
-
 class CartItemDetailSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = CartItem
-		fields = ['product', 'quantity', 'sub_total']
+		fields = '__all__'
 
 
 class CartItemCreateUpdateSerializer(serializers.ModelSerializer):
 	class Meta:
 		model = CartItem
-		fields = ['product', 'quantity', 'sub_total']
+		fields = ['product', 'quantity',]
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -115,13 +88,6 @@ class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
 			'gender',
 			]
 
-#  ..... Order Model ....
-# profile = models.ForeignKey(Profile, related_name='orders', default=1, on_delete=models.CASCADE)
-# date = models.DateField()
-# time = models.TimeField()
-#     def total_price(self):
-#         return sum(self.cartItems.all().sub_total)
-
 
 class OrderListSerializer(serializers.ModelSerializer):
 	# total_price = serializers.SerializerMethodField()
@@ -142,23 +108,20 @@ class OrderListSerializer(serializers.ModelSerializer):
 			'cartItems',
 			'detail',
 			]
+
 	def get_cartItems(self, obj):
 		cartItems = CartItem.objects.filter(order=obj)
 		item_list = CartItemDetailSerializer(cartItems, many=True).data
 		return item_list
 
-	# def get_total_price(self, obj):
-	# 	return str(obj.get_total_price())
-
 
 class OrderDetailSerializer(serializers.ModelSerializer):
-	# profile = ProfileSerializer() 
 	cartItems = serializers.SerializerMethodField()
 	class Meta:
 		model = CartItem
 		fields = '__all__'
 	def get_cartItems(self, obj):
 		cartItems = CartItem.objects.filter(order=obj)
-		item_list = CartItemListSerializer(cartItems, many=True).data
+		item_list = CartItemDetailSerializer(cartItems, many=True).data
 		return item_list
 

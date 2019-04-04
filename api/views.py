@@ -10,11 +10,9 @@ from .serializers import (
     UserCreateSerializer,
     CategoryListSerializer,
     CategoryDetailSerializer,
-    CategoryCreateUpdateSerializer,
     CartItemListSerializer,
     CartItemDetailSerializer,
     CartItemCreateUpdateSerializer,
-
     AddressSerializer,
     ProfileDetailSerializer,
     ProfileCreateUpdateSerializer,
@@ -45,22 +43,6 @@ class ProductDetailAPIView(RetrieveAPIView):
     lookup_url_kwarg = 'product_id'
 
 
-# class CategoryCreate(CreateAPIView):
-#     serializer_class = CategoryCreateUpdateSerializer
-
-
-# class CategoryUpdate(RetrieveUpdateAPIView):
-#     queryset = Category.objects.all()
-#     serializer_class = CategoryCreateUpdateSerializer
-#     lookup_field = 'id'
-#     lookup_url_kwarg = 'category_id'
-
-
-# class CategoryDelete(DestroyAPIView):
-#     queryset = Category.objects.all()
-#     lookup_field = 'id'
-#     lookup_url_kwarg = 'category_id'
-
 class ProfileDetailView(RetrieveAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileDetailSerializer
@@ -73,19 +55,6 @@ class ProfileUpdateView(RetrieveUpdateAPIView):
     serializer_class = ProfileCreateUpdateSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'profile_id'
-
-
-# class AddressListlView(RetrieveAPIView):
-#     queryset = Address.objects.filter(profile=profile_id)
-#     serializer_class = AddressSerializer
-#     # lookup_field = 'profile'
-#     lookup_url_kwarg = 'profile_id'
-
-class AddressListlView(ListAPIView):
-    serializer_class = AddressSerializer
-
-    def get_queryset(self):
-        return Address.objects.filter(profile=self.kwargs['profile_id'])
 
 
 class AddressUpdateView(RetrieveUpdateAPIView):
@@ -106,13 +75,14 @@ class AddressCreateView(CreateAPIView):
     permission_classes = [IsAuthenticated, ]
 
     def perform_create(self, serializer):
-        serializer.save(profile=self.request.user)
+        serializer.save(profile=self.request.user.profile)
 
 
 class OrderListView(ListAPIView):
-    queryset = Order.objects.all()
     serializer_class = OrderListSerializer
 
+    def get_queryset(self):
+        return Order.objects.filter(profile=self.request.user.profile)
 
 class OrderDetailView(RetrieveAPIView):
     queryset = Order.objects.all()

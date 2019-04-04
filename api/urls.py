@@ -39,7 +39,6 @@ urlpatterns = [
     path('<int:address_id>/addessdelete/',
          AddressCreateView.as_view(), name='addess-create'),
 
-
     path('order/list/', OrderListView.as_view(), name='api-order-list'),
     path('order/<int:order_id>/detail/',
          OrderDetailView.as_view(), name='api-order-detail'),
@@ -47,6 +46,5 @@ urlpatterns = [
     path('product/list/', ProductListAPIView.as_view(), name='product-list'),
     path('<int:product_id>/product/detail/',
          ProductDetailAPIView.as_view(), name='product-detail'),
-
 
 ]
