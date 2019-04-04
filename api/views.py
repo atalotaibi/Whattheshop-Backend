@@ -9,8 +9,6 @@ from .models import Category, Product, Order, Profile, Address, CartItem
 from .serializers import (
     UserCreateSerializer,
     CategoryListSerializer,
-    CategoryDetailSerializer,
-    CartItemListSerializer,
     CartItemDetailSerializer,
     CartItemCreateUpdateSerializer,
     AddressSerializer,

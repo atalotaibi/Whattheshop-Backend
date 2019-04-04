@@ -2,22 +2,15 @@ from django.urls import path
 from .views import (
     UserCreateAPIView,
     CategorysList,
-
     ProfileDetailView,
     ProfileUpdateView,
-    AddressListlView,
     AddressUpdateView,
     AddressDeleteView,
     AddressCreateView,
-
-
-
     OrderListView,
     OrderDetailView,
     ProductListAPIView,
     ProductDetailAPIView,
-
-
 )
 from rest_framework_jwt.views import obtain_jwt_token
 
@@ -30,8 +23,7 @@ urlpatterns = [
          ProfileDetailView.as_view(), name='api-detail'),
     path('<int:profile_id>/update/',
          ProfileUpdateView.as_view(), name='api-update'),
-    path('<int:profile_id>/addesslist/',
-         AddressListlView.as_view(), name='addess-list'),
+    
     path('<int:address_id>/addessupdate/',
          AddressUpdateView.as_view(), name='addess-update'),
     path('<int:address_id>/addesscreate/',
