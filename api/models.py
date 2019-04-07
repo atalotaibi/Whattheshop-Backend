@@ -3,11 +3,13 @@ from django.contrib.auth.models import User
 from django.dispatch import receiver
 from django.db.models.signals import post_save, pre_save, post_delete, pre_delete
 
+
 class Category(models.Model):
     name = models.CharField(max_length=120)
 
     def __str__(self):
         return self.name
+
 
 class Profile(models.Model):
     user = models.OneToOneField(User, default=1, on_delete=models.CASCADE)
@@ -25,10 +27,12 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwarg):
     if created:
         Profile.objects.create(user=instance)
+
 
 class Address(models.Model):
     profile = models.ForeignKey(
@@ -47,6 +51,7 @@ class Product(models.Model):
     def __str__(self):
         return self.name
 
+
 class Order(models.Model):
     profile = models.ForeignKey(
         Profile, related_name='orders', default=1, on_delete=models.CASCADE)
@@ -54,6 +59,7 @@ class Order(models.Model):
     time = models.TimeField()
     total_price = models.DecimalField(
         max_digits=10, decimal_places=3, default=0)
+
 
 class CartItem(models.Model):
     product = models.ForeignKey(Product, default=1, on_delete=models.CASCADE)
@@ -73,15 +79,17 @@ class CartItem(models.Model):
         default='C',
     )
 
+
 @receiver(pre_save, sender=CartItem)
 def get_sub_total(instance, *args, **kwargs):
     instance.sub_total = instance.quantity * instance.product.price
+
 
 @receiver(post_save, sender=CartItem)
 def update_total_stock(sender, instance, created, **kwargs):
     if (instance.product.stock >= instance.quantity):
         instance.order.total_price += instance.sub_total
-        instance.product.stock -= instance.quantity
+        # instance.product.stock -= instance.quantity
         instance.product.save()
         instance.order.save()
     else:
@@ -97,6 +105,7 @@ def delete_total_stock(sender, instance, **kwargs):
     instance.order.total_price -= instance.sub_total
     instance.product.save()
     instance.order.save()
+
 
 class Image(models.Model):
     product = models.ForeignKey(

@@ -11,6 +11,9 @@ from .views import (
     OrderDetailView,
     ProductListAPIView,
     ProductDetailAPIView,
+    CartItemCreateView,
+    CartItemUpdateView,
+    CartItemDeleteView
 )
 from rest_framework_jwt.views import obtain_jwt_token
 
@@ -23,7 +26,7 @@ urlpatterns = [
          ProfileDetailView.as_view(), name='api-detail'),
     path('<int:profile_id>/update/',
          ProfileUpdateView.as_view(), name='api-update'),
-    
+
     path('<int:address_id>/addessupdate/',
          AddressUpdateView.as_view(), name='addess-update'),
     path('<int:address_id>/addesscreate/',
@@ -38,5 +41,11 @@ urlpatterns = [
     path('product/list/', ProductListAPIView.as_view(), name='product-list'),
     path('<int:product_id>/product/detail/',
          ProductDetailAPIView.as_view(), name='product-detail'),
+    path('CartItemCreateView/',
+         CartItemCreateView.as_view(), name='cartitem-create'),
+    path('<int:cartItem_id>/CartItemUpdateView/',
+         CartItemUpdateView.as_view(), name='cartitem-update'),
+    path('<int:cartItem_id>/CartItemDeleteView/',
+         CartItemDeleteView.as_view(), name='cartitem-delete'),
 
 ]

@@ -1,6 +1,21 @@
 from django.contrib import admin
 
-from .models import Category, Product, Order, Profile, Address, CartItem,Image
+from .models import Category, Product, Order, Profile, Address, CartItem, Image
+from .views import (
+    UserCreateAPIView,
+    CategorysList,
+    ProfileDetailView,
+    ProfileUpdateView,
+    AddressUpdateView,
+    AddressDeleteView,
+    AddressCreateView,
+    OrderListView,
+    OrderDetailView,
+    ProductListAPIView,
+    ProductDetailAPIView,
+    CartItemCreateView,
+    CartItemUpdateView
+)
 # Register your models here.
 
 

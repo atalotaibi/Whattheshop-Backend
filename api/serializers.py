@@ -30,7 +30,7 @@ class ProductListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Product
-        fields = ['id', 'name', 'category', 'price', 'images']
+        fields = ['id', 'name', 'category', 'price', 'images', 'stock']
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
@@ -48,18 +48,18 @@ class CategoryListSerializer(serializers.ModelSerializer):
         fields = ['id', 'name']
 
 
-
 class CartItemDetailSerializer(serializers.ModelSerializer):
 
-	class Meta:
-		model = CartItem
-		fields = '__all__'
+    class Meta:
+        model = CartItem
+        fields = '__all__'
 
 
 class CartItemCreateUpdateSerializer(serializers.ModelSerializer):
-	class Meta:
-		model = CartItem
-		fields = ['product', 'quantity',]
+    class Meta:
+        model = CartItem
+        fields = ['product', 'quantity', 'order']
+
 
 class CategoryDetailSerializer(serializers.ModelSerializer):
     # products = ProductSerializer(many=True)
@@ -79,8 +79,7 @@ class CategoryCreateUpdateSerializer(serializers.ModelSerializer):
 class CartItemListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
-        fields = ['id', 'product']
-
+        fields = ['id', 'product', 'order']
 
 
 class AddressSerializer(serializers.ModelSerializer):
@@ -118,37 +117,40 @@ class ProfileCreateUpdateSerializer(serializers.ModelSerializer):
 
 class OrderListSerializer(serializers.ModelSerializer):
 
-	# total_price = serializers.SerializerMethodField()
-	cartItems = serializers.SerializerMethodField()
-	detail = serializers.HyperlinkedIdentityField(
-		view_name = "api-order-detail",
-		lookup_field = "id",
-		lookup_url_kwarg = "order_id"
-		)
-	class Meta:
-		model = Order
-		fields = [
-			'id',
-			'profile',
-			'date',
-			'time',
-			'total_price',
-			'cartItems',
-			'detail',
-			]
+        # total_price = serializers.SerializerMethodField()
+    cartItems = serializers.SerializerMethodField()
+    detail = serializers.HyperlinkedIdentityField(
+        view_name="api-order-detail",
+        lookup_field="id",
+        lookup_url_kwarg="order_id"
+    )
 
-	def get_cartItems(self, obj):
-		cartItems = CartItem.objects.filter(order=obj)
-		item_list = CartItemDetailSerializer(cartItems, many=True).data
-		return item_list
+    class Meta:
+        model = Order
+        fields = [
+            'id',
+            'profile',
+            'date',
+            'time',
+            'total_price',
+            'cartItems',
+            'detail',
+        ]
+
+    def get_cartItems(self, obj):
+        cartItems = CartItem.objects.filter(order=obj)
+        item_list = CartItemDetailSerializer(cartItems, many=True).data
+        return item_list
 
 
 class OrderDetailSerializer(serializers.ModelSerializer):
-	cartItems = serializers.SerializerMethodField()
-	class Meta:
-		model = CartItem
-		fields = '__all__'
-	def get_cartItems(self, obj):
-		cartItems = CartItem.objects.filter(order=obj)
-		item_list = CartItemDetailSerializer(cartItems, many=True).data
-		return item_list
+    cartItems = serializers.SerializerMethodField()
+
+    class Meta:
+        model = CartItem
+        fields = '__all__'
+
+    def get_cartItems(self, obj):
+        cartItems = CartItem.objects.filter(order=obj)
+        item_list = CartItemDetailSerializer(cartItems, many=True).data
+        return item_list
