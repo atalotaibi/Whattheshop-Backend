@@ -106,7 +106,7 @@ class CartItemCreateView(CreateAPIView):
         # print(new_data['product'])
         # print(new_data['order'])
         # print(new_data['quantity'])
-        # order_id = new_data['order']
+        order_id = new_data['order']
         # print(kwargs)
         serializer = self.serializer_class(data=data)
         print(serializer)
@@ -179,15 +179,15 @@ class CartItemDeleteView(RetrieveUpdateDestroyAPIView):
     lookup_field = 'id'
     lookup_url_kwarg = 'cartItem_id'
 
-    def destroy(self, request, *args, **kwargs):
-        my_data = request.data
-        cartItem_id = kwargs
-        serializer = self.serializer_class(data=my_data)
-        if serializer.is_valid():
-            valid_data = serializer.data
-            cartItem = CartItem.objects.get(id=cartItem_id['cartItem_id'])
-            cartItem.product.stock += cartItem.quantity
-            cartItem.delete()
-            cartItem.product.save()
-            return Response(valid_data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    # def destroy(self, request, *args, **kwargs):
+    #     my_data = request.data
+    #     cartItem_id = kwargs
+    #     serializer = self.serializer_class(data=my_data)
+    #     if serializer.is_valid():
+    #         valid_data = serializer.data
+    #         cartItem = CartItem.objects.get(id=cartItem_id['cartItem_id'])
+    #         cartItem.product.stock += cartItem.quantity
+    #         cartItem.delete()
+    #         cartItem.product.save()
+    #         return Response(valid_data, status=status.HTTP_200_OK)
+    #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
