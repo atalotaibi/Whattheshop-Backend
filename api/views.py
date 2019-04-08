@@ -100,7 +100,6 @@ class CartItemCreateView(CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        # print(request.data)
         new_data = QueryDict.dict(data)
         # print(new_data)
         # print(new_data['product'])
@@ -130,20 +129,18 @@ class CartItemCreateView(CreateAPIView):
             else:
                 # print("stock before")
                 # print(cartItem.product.stock)
-                cartItem.product.stock += cartItem.quantity
+                # cartItem.product.stock += cartItem.quantity
                 # print("stock after")
                 # print(cartItem.product.stock)
                 # print("quantity before:")
                 # print(cartItem.quantity)
-                cartItem.quantity = 0
-                cartItem.quantity += valid_data['quantity']
-                # print("quantity after")
-                # print(cartItem.quantity)
-                cartItem.save()
-                cartItem.product.stock = cartItem.product.stock - cartItem.quantity
-                # print("stock after again2")
-                # print(cartItem.product.stock)
+                # cartItem.quantity = 0
+                cartItem.product.stock -= valid_data['quantity']
                 cartItem.product.save()
+                cartItem.quantity += valid_data['quantity']
+                print("quantity after")
+                print(cartItem.quantity)
+                cartItem.save()
                 return Response(valid_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -175,7 +172,7 @@ class CartItemUpdateView(RetrieveUpdateAPIView):
 
 class CartItemDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = CartItem.objects.all()
-    serializer_class = CartItemCreateUpdateSerializer
+    # serializer_class = CartItemCreateUpdateSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'cartItem_id'
 
