@@ -29,6 +29,10 @@ class UserCreateAPIView(CreateAPIView):
     serializer_class = UserCreateSerializer
 
 
+class OrderCreateView(CreateAPIView):
+    serializer_class = OrderCreateSerializer
+
+
 class CategorysList(ListAPIView):
     queryset = Category.objects.all()
     serializer_class = CategoryListSerializer
