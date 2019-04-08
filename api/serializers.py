@@ -25,6 +25,14 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class OrderCreateSerializer(serializers.ModelSerializer):
+    cartItems = CartItemDetailSerializer(many=True)
+
+    class Meta:
+        model = Order
+        fields = ['cartItems', 'date', 'time', 'total_price']
+
+
 class ProductListSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True)
 
