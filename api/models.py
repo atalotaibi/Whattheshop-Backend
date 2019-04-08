@@ -55,17 +55,21 @@ class Product(models.Model):
 class Order(models.Model):
     profile = models.ForeignKey(
         Profile, related_name='orders', default=1, on_delete=models.CASCADE)
-    date = models.DateField()
-    time = models.TimeField()
+    timestamp = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(
         max_digits=10, decimal_places=3, default=0)
+
+    def update_total(self):
+        self.total_price = sum(self.cartItems.all(
+        ).values_list('sub_total', flat=True))
+        self.save()
 
 
 class CartItem(models.Model):
     product = models.ForeignKey(Product, default=1, on_delete=models.CASCADE)
     order = models.ForeignKey(
         Order, related_name='cartItems', default=1, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=0)
+    quantity = models.PositiveIntegerField(default=0)
     sub_total = models.DecimalField(max_digits=10, decimal_places=3, default=0)
     STATUS = (
         ('C', 'Cart'),
@@ -86,25 +90,9 @@ def get_sub_total(instance, *args, **kwargs):
 
 
 @receiver(post_save, sender=CartItem)
-def update_total_stock(sender, instance, created, **kwargs):
-    if (instance.product.stock >= instance.quantity):
-        instance.order.total_price += instance.sub_total
-        # instance.product.stock -= instance.quantity
-        instance.product.save()
-        instance.order.save()
-    else:
-        instance.quantity = 0
-        instance.sub_total = 0.000
-        instance.save()
-        instance.delete()
-
-
-@receiver(pre_delete, sender=CartItem)
-def delete_total_stock(sender, instance, **kwargs):
-    instance.product.stock += instance.quantity
-    instance.order.total_price -= instance.sub_total
-    instance.product.save()
-    instance.order.save()
+@receiver(post_delete, sender=CartItem)
+def update_total(sender, instance, *args, **kwargs):
+    instance.order.update_total()
 
 
 class Image(models.Model):

@@ -138,8 +138,7 @@ class OrderListSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'profile',
-            'date',
-            'time',
+            'timestamp',
             'total_price',
             'cartItems',
             'detail',
