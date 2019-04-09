@@ -25,6 +25,23 @@ class ImageSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class ProductDetailSerializer(serializers.ModelSerializer):
+    images = ImageSerializer(many=True)
+
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'category', 'price',
+                  'description', 'stock', 'images']
+
+
+class CartItemDetailSerializer(serializers.ModelSerializer):
+    product = ProductDetailSerializer()
+
+    class Meta:
+        model = CartItem
+        fields = '__all__'
+
+
 class OrderCreateSerializer(serializers.ModelSerializer):
     cartItems = CartItemDetailSerializer(many=True)
 
@@ -41,15 +58,6 @@ class ProductListSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'category', 'price', 'images', 'stock']
 
 
-class ProductDetailSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many=True)
-
-    class Meta:
-        model = Product
-        fields = ['id', 'name', 'category', 'price',
-                  'description', 'stock', 'images']
-
-
 class CategoryListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
@@ -57,6 +65,7 @@ class CategoryListSerializer(serializers.ModelSerializer):
 
 
 class CartItemDetailSerializer(serializers.ModelSerializer):
+    product = ProductDetailSerializer()
 
     class Meta:
         model = CartItem

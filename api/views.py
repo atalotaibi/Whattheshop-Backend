@@ -16,6 +16,7 @@ from .serializers import (
     AddressSerializer,
     ProfileDetailSerializer,
     ProfileCreateUpdateSerializer,
+    OrderCreateSerializer
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from .serializers import (OrderListSerializer, OrderDetailSerializer,
