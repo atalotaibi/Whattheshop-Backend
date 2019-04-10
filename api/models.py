@@ -45,7 +45,8 @@ class Product(models.Model):
     description = models.TextField()
     stock = models.IntegerField(default=0)
 
-    category = models.ForeignKey(Category, default=1, on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        Category, related_name='products', default=1, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=3, default=0)
 
     def __str__(self):
