@@ -102,7 +102,7 @@ class OrderListView(ListAPIView):
     serializer_class = OrderListSerializer
 
     def get_queryset(self):
-        return Order.objects.filter(profile=self.request.user.profile)
+        return Order.objects.filter(profile=self.request.user.profile, completed=True)
 
     # def get(self, request, format=None):
     #     profile = Profile.objects.get(user=request.user)
