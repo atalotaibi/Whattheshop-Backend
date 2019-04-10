@@ -16,7 +16,9 @@ from .serializers import (
     AddressSerializer,
     ProfileDetailSerializer,
     ProfileCreateUpdateSerializer,
-    OrderCreateSerializer
+    OrderCreateSerializer,
+    ProductListSerializer,
+    ProductDetailSerializer,
 )
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from .serializers import (OrderListSerializer, OrderDetailSerializer,
@@ -49,6 +51,16 @@ class ProductDetailAPIView(RetrieveAPIView):
     serializer_class = ProductDetailSerializer
     lookup_field = 'id'
     lookup_url_kwarg = 'product_id'
+
+    # def get_serializer_context(self):
+    #     print(self.context)
+    #     return {'request': self.request}
+    # def get(self, request, format=None):
+    #     product = Product.objects.get(id=request.id)
+    #     serializer = ProductDetailSerializer(
+    #         product, context={"request": request})
+    #     print(request)
+    #     return Response(serializer.data)
 
 
 class ProfileDetailView(RetrieveAPIView):
@@ -91,6 +103,14 @@ class OrderListView(ListAPIView):
 
     def get_queryset(self):
         return Order.objects.filter(profile=self.request.user.profile)
+
+    # def get(self, request, format=None):
+    #     profile = Profile.objects.get(user=request.user)
+    #     orders = Order.objects.get(profile=profile)
+    #     serializer = OrderListSerializer(orders, context={'request': request})
+    #     if request.user.is_anonymous:
+    #         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    #     return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class OrderDetailView(RetrieveAPIView):
@@ -175,7 +195,7 @@ class CartItemUpdateView(RetrieveUpdateAPIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class CartItemDeleteView(RetrieveUpdateDestroyAPIView):
+class CartItemDeleteView(DestroyAPIView):
     queryset = CartItem.objects.all()
     # serializer_class = CartItemCreateUpdateSerializer
     lookup_field = 'id'

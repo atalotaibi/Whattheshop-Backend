@@ -26,12 +26,25 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class ProductDetailSerializer(serializers.ModelSerializer):
-    images = ImageSerializer(many=True)
+    images = serializers.SerializerMethodField()
+    # images = ImageSerializer(many=True)
+    # print(images)
 
     class Meta:
         model = Product
         fields = ['id', 'name', 'category', 'price',
                   'description', 'stock', 'images']
+
+    def get_images(self, obj):
+        queryset = Image.objects.filter(product=obj)
+        images = ImageSerializer(
+            queryset, many=True, context=self.context).data
+        print(self)
+        print(self.context)
+        print(self.context.get("images"))
+        print(obj.images.all())
+        print(images)
+        return images
 
 
 class CartItemDetailSerializer(serializers.ModelSerializer):
@@ -52,6 +65,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
 class ProductListSerializer(serializers.ModelSerializer):
     images = ImageSerializer(many=True)
+    # print(images)
 
     class Meta:
         model = Product
@@ -155,7 +169,8 @@ class OrderListSerializer(serializers.ModelSerializer):
 
     def get_cartItems(self, obj):
         cartItems = CartItem.objects.filter(order=obj)
-        item_list = CartItemDetailSerializer(cartItems, many=True).data
+        item_list = CartItemDetailSerializer(
+            cartItems, many=True, context=self.context).data
         return item_list
 
 
