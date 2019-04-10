@@ -58,6 +58,7 @@ class Order(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     total_price = models.DecimalField(
         max_digits=10, decimal_places=3, default=0)
+    completed = models.BooleanField(default=False)
 
     def update_total(self):
         self.total_price = sum(self.cartItems.all(
