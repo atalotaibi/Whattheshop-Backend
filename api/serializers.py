@@ -60,10 +60,10 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'profile',]
+        fields = ['id', 'profile', ]
         # extra_kwargs = {
         #     'id': {
-        #         'read_only': False, 
+        #         'read_only': False,
         #         'required': True
         #      }
         # } #very important
@@ -79,9 +79,11 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 
 class CategoryListSerializer(serializers.ModelSerializer):
+    products = ProductListSerializer(many=True)
+
     class Meta:
         model = Category
-        fields = ['id', 'name']
+        fields = ['id', 'name', 'products']
 
 
 class CartItemDetailSerializer(serializers.ModelSerializer):
