@@ -92,6 +92,12 @@ class OrderListView(ListAPIView):
     def get_queryset(self):
         return Order.objects.filter(profile=self.request.user.profile, completed=True)
 
+class CartItemsView(ListAPIView):
+    serializer_class = OrderListSerializer
+
+    def get_queryset(self):
+        return Order.objects.filter(profile=self.request.user.profile, completed=False)
+
 
 class OrderDetailView(RetrieveAPIView):
     queryset = Order.objects.all()
@@ -193,3 +199,10 @@ class CartItemDeleteView(RetrieveUpdateDestroyAPIView):
     #         cartItem.product.save()
     #         return Response(valid_data, status=status.HTTP_200_OK)
     #     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class CheckOutView(APIView):
+    def get(self, request, order_id):
+        order = Order.objects.get(id=order_id)
+        order.completed = True
+        order.save()
+        return Response()

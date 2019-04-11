@@ -157,6 +157,7 @@ class OrderListSerializer(serializers.ModelSerializer):
             'total_price',
             'cartItems',
             'detail',
+            'completed'
         ]
 
     def get_cartItems(self, obj):
